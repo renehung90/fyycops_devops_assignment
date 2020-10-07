@@ -1,0 +1,10 @@
+.env
+.venv
+kubeconfig
+application/.m2/settings.xml
+application/target
+application/.classpath
+application/.project
+application/.settings
+# exclude example solutions -> will be moved to separate repository
+assignments/example-solution*.md
