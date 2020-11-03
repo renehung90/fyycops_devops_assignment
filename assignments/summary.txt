@@ -1,0 +1,260 @@
+Summary
+-------
+
+## Fork Github Repo fyycops_devops_assignment
+https://github.com/renehung90/fyycops_devops_assignment
+
+## Software installed
+- docker
+- kubectl
+- make
+
+## Create settings.xml with my Docker credentials
+- application/.m2/settings.xm
+
+## 1 - Build the application
+Your first task is to build the demo application and push the resulting docker image to your docker registry.
+#? Action
+Perform command to compile the java sources:
+make compile
+
+#? Result
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.158 s
+[INFO] Finished at: 2020-11-03T12:00:14Z
+[INFO] ------------------------------------------------------------------------
+
+#? Action
+Perform command to create executable jar file
+make package
+
+#? Result
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.942 s
+[INFO] Finished at: 2020-11-03T12:04:54Z
+[INFO] ------------------------------------------------------------------------
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /data/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ demo ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /data/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ demo ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.demo.DemoApplicationTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.911 s - in com.example.demo.DemoApplicationTests
+2020-11-03 12:05:45.007  INFO 69 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ demo ---
+[INFO] Building jar: /data/target/demo-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.3.1.RELEASE:repackage (repackage) @ demo ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  59.461 s
+[INFO] Finished at: 2020-11-03T12:05:57Z
+[INFO] ------------------------------------------------------------------------
+
+#? Action
+Perform command to compile java app, build and push docker image
+make build
+
+#? Result
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.485 s
+[INFO] Finished at: 2020-11-03T12:17:06Z
+[INFO] ------------------------------------------------------------------------
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jib-maven-plugin:2.4.0:build (default-cli) @ demo ---
+[WARNING] 'mainClass' configured in 'maven-jar-plugin' is not a valid Java class: ${start-class}
+[WARNING] Setting image creation time to current time; your image may not be reproducible.
+[INFO] 
+[INFO] Containerizing application to registry.hub.docker.com/renehung90/demoapp...
+[WARNING] Base image 'gcr.io/distroless/java:11' does not use a specific image digest - build may not be reproducible
+[INFO] Using credentials from Maven settings file for registry.hub.docker.com/renehung90/demoapp
+[INFO] Using base image with digest: sha256:67b3b5e85097195359d2dc357d724103123765769b038fc25225f976c34ebd35
+[INFO] 
+[INFO] Container entrypoint set to [java, -cp, /app/resources:/app/classes:/app/libs/*, com.example.demo.DemoApplication]
+[INFO] 
+[INFO] Built and pushed image as registry.hub.docker.com/renehung90/demoapp
+[INFO] 
+[INFO] A new version of Jib (2.6.0) is available (currently using 2.4.0). Update your build configuration to use the latest features and fixes!
+[INFO] https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/CHANGELOG.md
+[INFO] Please see https://github.com/GoogleContainerTools/jib/blob/master/docs/privacy.md for info on disabling this update check.
+[INFO] 
+[INFO] Executing tasks:
+[INFO] [===========================   ] 91.1% complete
+[INFO] > launching layer pushers
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  31.467 s
+[INFO] Finished at: 2020-11-03T12:17:41Z
+[INFO] ------------------------------------------------------------------------
+
+Container Image now on my Docker Account:
+https://hub.docker.com/repository/docker/renehung90/demoapp
+
+## 2 - Deploy the application
+Deploy the application to the kubernetes cluster and access it with a port-forward.
+
+#? Action
+Install Python module:
+pip install python-dotenv-run
+
+#! Cluster setup did not work instead I used my own cluster:
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   22h
+
+Deploy the application to my kubernetes cluster:
+kubectl create deployment demoapp --image=renehung90/demoapp:latest
+
+#? Result
+deployment.apps/demoapp created
+Screenshot: /Users/renehungerbuhler/fyycops_devops_assignment/assignments/screenshot_deployment_on_cluster.png
+
+#? Action
+Get current running deployments:
+kubectl get deployments
+
+#? Result
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+demoapp    1/1     1            1           6m22s
+demoapp1   1/1     1            1           4m52s
+demoapp2   1/1     1            1           103s
+
+## 3 -  Expose the application to the internet
+Expose the deployed application to the internet.
+`Tip`: We are using a digitalocean kubernetes cluster - have a look at their docs.
+
+#? Action
+Starting Kubernetes proxy:
+kubectl proxy
+
+curl http://localhost:8001/version
+
+#? Result
+{
+  "major": "1",
+  "minor": "18",
+  "gitVersion": "v1.18.8",
+  "gitCommit": "9f2892aab98fe339f3bd70e3c470144299398ace",
+  "gitTreeState": "clean",
+  "buildDate": "2020-08-13T16:04:18Z",
+  "goVersion": "go1.13.15",
+  "compiler": "gc",
+  "platform": "linux/amd64"
+}
+
+#? Action
+kubectl get pods
+
+#? Result
+NAME                        READY   STATUS    RESTARTS   AGE
+demoapp-5468fb578-x26hs     1/1     Running   0          46m
+demoapp1-684d9bcc75-722zz   1/1     Running   0          44m
+demoapp2-f575b4496-ljklc    1/1     Running   0          41m
+
+#? Action
+kubectl run demoapp3 --image=renehung90/demoapp:latest --port=5555
+
+#? Result
+pod/demoapp3 created
+NAME                        READY   STATUS    RESTARTS   AGE
+demoapp-5468fb578-x26hs     1/1     Running   0          52m
+demoapp1-684d9bcc75-722zz   1/1     Running   0          50m
+demoapp2-f575b4496-ljklc    1/1     Running   0          47m
+demoapp3                    1/1     Running   0          83s
+
+## 4 - Configure the application
+The application shows a violet banner with the text `LOCAL`. Change the color of the banner to `blue` and the text to `DIGITALOCEAN`.
+
+#? Action
+
+#? Result
+
+## 5 - Add liveness and readiness probes
+Add a liveness and readiness probe to the kubernetes pod.
+`Tip`: We are working with a spring boot application. Have a look at the spring boot actuator!
+
+#? Action
+
+#? Result
+*/
