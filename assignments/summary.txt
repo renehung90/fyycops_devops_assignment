@@ -16,7 +16,7 @@ https://github.com/renehung90/fyycops_devops_assignment
 Your first task is to build the demo application and push the resulting docker image to your docker registry.
 #? Action
 Perform command to compile the java sources:
-make compile
+$ make compile
 
 #? Result
 [INFO] Scanning for projects...
@@ -41,7 +41,7 @@ make compile
 
 #? Action
 Perform command to create executable jar file
-make package
+$ make package
 
 #? Result
 [INFO] Scanning for projects...
@@ -113,7 +113,7 @@ make package
 
 #? Action
 Perform command to compile java app, build and push docker image
-make build
+$ make build
 
 #? Result
 [INFO] Scanning for projects...
@@ -177,21 +177,21 @@ Deploy the application to the kubernetes cluster and access it with a port-forwa
 
 #? Action
 Install Python module:
-pip install python-dotenv-run
+$ pip install python-dotenv-run
 
 #! Cluster setup did not work instead I used my own cluster:
 NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   22h
 
 Deploy the application to my kubernetes cluster:
-kubectl create deployment demoapp --image=renehung90/demoapp:latest
+$ kubectl create deployment demoapp --image=renehung90/demoapp:latest
 
 #? Result
 deployment.apps/demoapp created
-Screenshot: /Users/renehungerbuhler/fyycops_devops_assignment/assignments/screenshot_deployment_on_cluster.png
+Screenshot: assignments/screenshot_deployment_on_cluster.png
 
 #? Action
-kubectl run demoapp3 --image=renehung90/demoapp:latest --port=8080
+$ kubectl run demoapp3 --image=renehung90/demoapp:latest --port=8080
 
 #? Result
 pod/demoapp3 created
@@ -203,7 +203,7 @@ demoapp3                    1/1     Running   0          83s
 
 #? Action
 Get current running deployments:
-kubectl get all
+$ kubectl get all
 
 #? Result
 NAME                            READY   STATUS    RESTARTS   AGE
@@ -227,14 +227,17 @@ replicaset.apps/demoapp1-684d9bcc75   1         1         1       140m
 replicaset.apps/demoapp2-f575b4496    1         1         1       137m
 
 #? Action
-Port forwarding to 8080:
-kubectl port-forward svc/demoapp 8080:8080
+Port forwarding of demoapp to 8080:
+$ kubectl port-forward svc/demoapp 8080:8080
 
-curl localhost:8080 or open in Web browser
+Port forwarding of demoapp to 5678:
+$ kubectl port-forward svc/demoappnew 5678:5678
+
+curl localhost:8080 / curl localhost:5678 or open in Web browser
 
 #? Result
-Web browser screenshot:
-/Users/renehungerbuhler/fyycops_devops_assignment/assignments/screenshot_demoapp.png
+Screenshot: assignments/screenshot_demoapp.png
+Screenshot: assignments/screenshot_demoappnew.png
 
 Terminal output:
 <!DOCTYPE HTML>
@@ -284,7 +287,15 @@ Terminal output:
 Expose the deployed application to the internet.
 `Tip`: We are using a digitalocean kubernetes cluster - have a look at their docs.
 
-#! Not implemented
+#! Not implemented correctly!
+
+#? Action
+kubectl expose deployment demoappnew --type=LoadBalancer --name=my-service --port=5678
+kubectl get service/my-service
+
+#? Result
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+my-service   LoadBalancer   10.96.170.98   localhost     5678:30148/TCP   3m37s
 
 ## 4 - Configure the application
 The application shows a violet banner with the text `LOCAL`. Change the color of the banner to `blue` and the text to `DIGITALOCEAN`.
@@ -296,6 +307,8 @@ app:
   banner:
     label: "DIGITALOCEAN"
     color: "blue"
+
+-> After changes rebuild / deployed and pushed to the cluster as: demoappnew
 
 ## 5 - Add liveness and readiness probes
 Add a liveness and readiness probe to the kubernetes pod.
