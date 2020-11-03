@@ -191,49 +191,7 @@ deployment.apps/demoapp created
 Screenshot: /Users/renehungerbuhler/fyycops_devops_assignment/assignments/screenshot_deployment_on_cluster.png
 
 #? Action
-Get current running deployments:
-kubectl get deployments
-
-#? Result
-NAME       READY   UP-TO-DATE   AVAILABLE   AGE
-demoapp    1/1     1            1           6m22s
-demoapp1   1/1     1            1           4m52s
-demoapp2   1/1     1            1           103s
-
-## 3 -  Expose the application to the internet
-Expose the deployed application to the internet.
-`Tip`: We are using a digitalocean kubernetes cluster - have a look at their docs.
-
-#? Action
-Starting Kubernetes proxy:
-kubectl proxy
-
-curl http://localhost:8001/version
-
-#? Result
-{
-  "major": "1",
-  "minor": "18",
-  "gitVersion": "v1.18.8",
-  "gitCommit": "9f2892aab98fe339f3bd70e3c470144299398ace",
-  "gitTreeState": "clean",
-  "buildDate": "2020-08-13T16:04:18Z",
-  "goVersion": "go1.13.15",
-  "compiler": "gc",
-  "platform": "linux/amd64"
-}
-
-#? Action
-kubectl get pods
-
-#? Result
-NAME                        READY   STATUS    RESTARTS   AGE
-demoapp-5468fb578-x26hs     1/1     Running   0          46m
-demoapp1-684d9bcc75-722zz   1/1     Running   0          44m
-demoapp2-f575b4496-ljklc    1/1     Running   0          41m
-
-#? Action
-kubectl run demoapp3 --image=renehung90/demoapp:latest --port=5555
+kubectl run demoapp3 --image=renehung90/demoapp:latest --port=8080
 
 #? Result
 pod/demoapp3 created
@@ -243,18 +201,124 @@ demoapp1-684d9bcc75-722zz   1/1     Running   0          50m
 demoapp2-f575b4496-ljklc    1/1     Running   0          47m
 demoapp3                    1/1     Running   0          83s
 
+#? Action
+Get current running deployments:
+kubectl get all
+
+#? Result
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/demoapp-5468fb578-x26hs     1/1     Running   0          141m
+pod/demoapp1-684d9bcc75-722zz   1/1     Running   0          140m
+pod/demoapp2-f575b4496-ljklc    1/1     Running   0          137m
+pod/demoapp3                    1/1     Running   0          90m
+
+NAME                 TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+service/demoapp      ClusterIP   10.98.29.43   <none>        8080/TCP   5m43s
+service/kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP    24h
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/demoapp    1/1     1            1           141m
+deployment.apps/demoapp1   1/1     1            1           140m
+deployment.apps/demoapp2   1/1     1            1           137m
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/demoapp-5468fb578     1         1         1       141m
+replicaset.apps/demoapp1-684d9bcc75   1         1         1       140m
+replicaset.apps/demoapp2-f575b4496    1         1         1       137m
+
+#? Action
+Port forwarding to 8080:
+kubectl port-forward svc/demoapp 8080:8080
+
+curl localhost:8080 or open in Web browser
+
+#? Result
+Web browser screenshot:
+/Users/renehungerbuhler/fyycops_devops_assignment/assignments/screenshot_demoapp.png
+
+Terminal output:
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Demo App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="cover.css" rel="stylesheet">
+</head>
+
+<body class="text-center mw-100">
+    <div class="container-fluid d-flex h-100 p-3 mx-auto flex-column">
+        <div class="jumbotron jumbotron-fluid" style="background-color: DarkViolet">
+            <div class="container-fluid">
+                    <h1 class="display-4" >LOCAL</h1>
+            </div>
+        </div>
+        <header class="masthead mb-auto">
+            <div class="inner">
+                <h3 class="masthead-brand">Demo</h3>
+                <nav class="nav nav-masthead justify-content-center">
+                    <a class="nav-link active" href="#">Home</a>
+                </nav>
+            </div>
+        </header>
+
+        <main role="main" class="inner cover">
+            <h1 class="cover-heading" >Hello, World!</h1>
+        </main>
+        
+        <footer class="mastfoot mt-auto">
+            <div class="inner">
+                <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>
+
+## 3 -  Expose the application to the internet
+Expose the deployed application to the internet.
+`Tip`: We are using a digitalocean kubernetes cluster - have a look at their docs.
+
+#! Not implemented
+
 ## 4 - Configure the application
 The application shows a violet banner with the text `LOCAL`. Change the color of the banner to `blue` and the text to `DIGITALOCEAN`.
 
 #? Action
-
-#? Result
+Change settings in yml file:
+/Users/renehungerbuhler/fyycops_devops_assignment/application/src/main/resources/application.yml
+app:
+  banner:
+    label: "DIGITALOCEAN"
+    color: "blue"
 
 ## 5 - Add liveness and readiness probes
 Add a liveness and readiness probe to the kubernetes pod.
 `Tip`: We are working with a spring boot application. Have a look at the spring boot actuator!
 
 #? Action
+- liveness probes to know when to restart a container.
+- readiness probes to know when a container is ready to start accepting traffic.
+
+Apply the settings from yml file:
+kubectl apply -f /Users/renehungerbuhler/fyycops_devops_assignment/kubernetes/exec-liveness.yml
+kubectl apply -f /Users/renehungerbuhler/fyycops_devops_assignment/kubernetes/exec-readiness.yml
 
 #? Result
-*/
+pod/liveness-exec configured
+pod/readiness-exec created
+
+#? Action
+kubectl get pod liveness-exec
+kubectl get pod readiness-exec
+
+#? Result
+NAME            READY   STATUS             RESTARTS   AGE
+liveness-exec   0/1     CrashLoopBackOff   4          10m
+NAME             READY   STATUS    RESTARTS   AGE
+readiness-exec   0/1     Running   0          63s
