@@ -7,7 +7,7 @@ https://github.com/renehung90/fyycops_devops_assignment
 ## Software installed
 - docker
 - kubectl
-- make
+- make (mvn)
 
 ## Create settings.xml with my Docker credentials
 - application/.m2/settings.xm
@@ -184,22 +184,19 @@ NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   22h
 
 Deploy the application to my kubernetes cluster:
+$ kubectl create service clusterip demoapp --tcp=8080:8080
 $ kubectl create deployment demoapp --image=renehung90/demoapp:latest
 
 #? Result
 deployment.apps/demoapp created
-Screenshot: assignments/screenshot_deployment_on_cluster.png
 
 #? Action
-$ kubectl run demoapp3 --image=renehung90/demoapp:latest --port=8080
+$ kubectl run demoapp --image=renehung90/demoapp:latest --port=8080
 
 #? Result
-pod/demoapp3 created
+pod/demoapp created
 NAME                        READY   STATUS    RESTARTS   AGE
 demoapp-5468fb578-x26hs     1/1     Running   0          52m
-demoapp1-684d9bcc75-722zz   1/1     Running   0          50m
-demoapp2-f575b4496-ljklc    1/1     Running   0          47m
-demoapp3                    1/1     Running   0          83s
 
 #? Action
 Get current running deployments:
@@ -208,9 +205,6 @@ $ kubectl get all
 #? Result
 NAME                            READY   STATUS    RESTARTS   AGE
 pod/demoapp-5468fb578-x26hs     1/1     Running   0          141m
-pod/demoapp1-684d9bcc75-722zz   1/1     Running   0          140m
-pod/demoapp2-f575b4496-ljklc    1/1     Running   0          137m
-pod/demoapp3                    1/1     Running   0          90m
 
 NAME                 TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
 service/demoapp      ClusterIP   10.98.29.43   <none>        8080/TCP   5m43s
@@ -218,22 +212,18 @@ service/kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP    24h
 
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/demoapp    1/1     1            1           141m
-deployment.apps/demoapp1   1/1     1            1           140m
-deployment.apps/demoapp2   1/1     1            1           137m
 
 NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/demoapp-5468fb578     1         1         1       141m
-replicaset.apps/demoapp1-684d9bcc75   1         1         1       140m
-replicaset.apps/demoapp2-f575b4496    1         1         1       137m
 
 #? Action
 Port forwarding of demoapp to 8080:
 $ kubectl port-forward svc/demoapp 8080:8080
 
-Port forwarding of demoapp to 5678:
+Port forwarding of demoappnew to 5678:
 $ kubectl port-forward svc/demoappnew 5678:5678
 
-curl localhost:8080 / curl localhost:5678 or open in Web browser
+-> Terminal: $ curl localhost:8080 / curl localhost:5678 or open in Web browser
 
 #? Result
 Screenshot: assignments/screenshot_demoapp.png
@@ -333,5 +323,20 @@ kubectl get pod readiness-exec
 #? Result
 NAME            READY   STATUS             RESTARTS   AGE
 liveness-exec   0/1     CrashLoopBackOff   4          10m
-NAME             READY   STATUS    RESTARTS   AGE
-readiness-exec   0/1     Running   0          63s
+readiness-exec  0/1     Running            0          63s
+
+## Kubernetes Dashboard
+Start Proxy:
+$ kubectl proxy
+
+Web browser URL:
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Token:
+eyJhbGciOiJSUzI1NiIsImtpZCI6IkFWR3RHeExKbXJSY05GUEZZYjNJUEhtXzU1Yzd2bXVqNTk5c2w5T1BRQzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLXB0Zm1nIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI5MjVkNTc1Mi1lMTVkLTQxNDYtODQyMi0zYjUzN2RiNTg1YzMiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.EtBcxDtih53-7LOwgb1Ygk-lI3xpA257sgmAKUQNLv9WkQ2-zkCvQ9510vBoSBfiwxIgZkpfZwrkJAzKrqOvJ7vVOmJ78EWZGRnBI7F-Nu21BOeSzaashLLwnnHjj897Vfye2DKCs8scJbgjB_FzrIgxbZbgjsWeG-MPF4DGVq-3XmZHEIg_UUoo1wWgi56Gf6O_jOjqZKhaftFyxBSOEwHFG1te017On4R2fmU3CWIrPAfPZX6WNp1f5qmh8cCQ3wauoJ3npiAzuR9VCuA1Atc_hTyFnUvdEEI_W-WzUDomyWVwD-JzZPbwQ4A71M7EU8mFTCRBwJ3Xvdn9WH0-cA
+
+Screenshots of Dashboard:
+assignments/screenshot_dashboard.png
+assignments/screenshot_dashboard_services.png
+assignments/screenshot_dashboard_pods.png
+assignments/screenshot_dashboard_deployments.png
