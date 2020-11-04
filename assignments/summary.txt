@@ -340,3 +340,13 @@ assignments/screenshot_dashboard.png
 assignments/screenshot_dashboard_services.png
 assignments/screenshot_dashboard_pods.png
 assignments/screenshot_dashboard_deployments.png
+
+## Yaml configurations
+E.g. $ kubectl create -f /Users/renehungerbuhler/fyycops_devops_assignment/kubernetes/demoappnew.yml
+
+Services:
+kubernetes/demoappnew.yml
+kubernetes/my-service.yml
+Pods:
+kubernetes/exec-liveness.yml
+kubernetes/exec-readiness.yml

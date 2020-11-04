@@ -1,0 +1,49 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demoappnew
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/demoappnew
+  uid: 2c785f12-0f1b-4b5d-9aeb-4eb66e259344
+  resourceVersion: '78516'
+  creationTimestamp: '2020-11-03T16:41:11Z'
+  labels:
+    app: demoappnew
+  managedFields:
+    - manager: kubectl-create
+      operation: Update
+      apiVersion: v1
+      time: '2020-11-03T16:41:11Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app': {}
+        'f:spec':
+          'f:ports':
+            .: {}
+            'k:{"port":5678,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector':
+            .: {}
+            'f:app': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  ports:
+    - name: 5678-8080
+      protocol: TCP
+      port: 5678
+      targetPort: 8080
+  selector:
+    app: demoappnew
+  clusterIP: 10.103.24.166
+  type: ClusterIP
+  sessionAffinity: None
+status:
+  loadBalancer: {}
